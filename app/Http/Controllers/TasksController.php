@@ -52,6 +52,20 @@ class TasksController extends Controller
     }
 
     /**
+     * Get weekly tasks marked as done.
+    */
+    public function get_weekly_tasks()
+    {
+        $weekly_tasks = Tasks::where('user_id', auth()->user()->id)
+            ->where('is_done', true)
+            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->get();
+
+        return response($weekly_tasks, 200);
+    }
+
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
